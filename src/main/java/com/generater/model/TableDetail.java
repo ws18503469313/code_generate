@@ -2,6 +2,7 @@ package com.generater.model;
 
 import com.generater.utils.StringUtils;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -11,19 +12,27 @@ import java.util.Date;
  * @author polunzi
  *
  */
-public class TableDetail {
+public class TableDetail  {
 	/**
 	 * 字段名
 	 */
 	private String cloumnName;
+    /**
+     * 属性名
+     */
+    private String property;
 	/**
-	 * 字段类型
+	 * 字段类型(java)
 	 */
 	private String colunmType;
+    /**
+     * 数据库类型
+     */
+	private String jdbcType;
 	/**
 	 * 是否是主键
 	 */
-	private String isPri;
+	private String pri;
 	/**
 	 * 可否为空
 	 */
@@ -32,59 +41,92 @@ public class TableDetail {
 	 * 备注
 	 */
 	private String comment;
-	
-	public String getCloumnName() {
-		return cloumnName;
-	}
-	public void setCloumnName(String cloumnName) {
 
-
-	    this.cloumnName = StringUtils.modelNameProcess(cloumnName).toString();
-	}
-	public String getColunmType() {
-		return colunmType;
-	}
+    /**
+     * 根据数据库类型获得java类型名称
+     * @param colunmType
+     */
 	public void setColunmType(String colunmType) {
-        if(cloumnName.toLowerCase().contains("char") || cloumnName.toLowerCase().contains("char")
-                || cloumnName.toLowerCase().contains("blob")
-                || cloumnName.toLowerCase().contains("text"))
+        if(colunmType.toLowerCase().contains("char") || colunmType.toLowerCase().contains("char")
+                || colunmType.toLowerCase().contains("blob")
+                || colunmType.toLowerCase().contains("text"))
             this.colunmType = "String";
-        else if(cloumnName.toLowerCase().contains("biginteger") )
+        else if(colunmType.toLowerCase().contains("biginteger") )
             this.colunmType = "Long";
-        else if(cloumnName.toLowerCase().contains("int")
-                || cloumnName.toLowerCase().contains("smallint")
-                || cloumnName.toLowerCase().contains("mediumint"))
+        else if(colunmType.toLowerCase().contains("int")
+                || colunmType.toLowerCase().contains("smallint")
+                || colunmType.toLowerCase().contains("mediumint"))
             this.colunmType = "Integer";
-        else if(cloumnName.toLowerCase().contains("float") )
+        else if(colunmType.toLowerCase().contains("float") )
             this.colunmType = "Float";
-        else if(cloumnName.toLowerCase().contains("biginteger") || cloumnName.toLowerCase().contains("integer") )
+        else if(colunmType.toLowerCase().contains("biginteger") || colunmType.toLowerCase().contains("integer") )
             this.colunmType = "Long";
-        else if(cloumnName.toLowerCase().contains("decimal") )
+        else if(colunmType.toLowerCase().contains("decimal") )
             this.colunmType = "BigDecimal";
-        else if(cloumnName.toLowerCase().contains("timestamp")|| cloumnName.toLowerCase().contains("datetime") )
+        else if(colunmType.toLowerCase().contains("timestamp")|| colunmType.toLowerCase().contains("datetime") )
             this.colunmType = "Date";
-        else if(cloumnName.toLowerCase().contains("bit") )
+        else if(colunmType.toLowerCase().contains("bit") )
             this.colunmType = "Boolean";
+        else if(colunmType.toLowerCase().contains("double")){
+            this.colunmType = "Double";
+        }
         else this.colunmType = "Object";
+        this.jdbcType = colunmType.substring(0, colunmType.indexOf("("));
     }
-	public String getIsPri() {
-		return isPri;
-	}
-	public void setIsPri(String isPri) {
-		this.isPri = isPri;
-	}
-	public String getNullAble() {
-		return nullAble;
-	}
-	public void setNullAble(String nullAble) {
-		this.nullAble = nullAble;
-	}
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
-	
+
+    public String getCloumnName() {
+        return cloumnName;
+    }
+
+    public void setCloumnName(String cloumnName) {
+	    this.cloumnName = cloumnName;
+        this.property = StringUtils.modelNameProcess(cloumnName).toString();
+    }
+
+    public String getColunmType() {
+        return colunmType;
+    }
+
+    public String getPri() {
+        return pri;
+    }
+
+    public void setPri(String pri) {
+        this.pri = pri;
+    }
+
+    public String getNullAble() {
+        return nullAble;
+    }
+
+    public void setNullAble(String nullAble) {
+        this.nullAble = nullAble;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getJdbcType() {
+        return jdbcType;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    @Override
+    public String toString() {
+        return "TableDetail{" +
+                "cloumnName='" + cloumnName + '\'' +
+                ", colunmType='" + colunmType + '\'' +
+                ", pri='" + pri + '\'' +
+                ", nullAble='" + nullAble + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }

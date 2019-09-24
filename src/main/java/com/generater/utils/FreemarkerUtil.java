@@ -7,6 +7,8 @@ import com.generater.model.Table;
 import com.generater.model.TableDetail;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,80 +18,104 @@ import java.util.List;
 
 public class FreemarkerUtil {
 
-    public static void main(String[] args) throws IOException {
-        // 参数值
-        Table table = new Table();
-        table.setComment("comment_1");
-        table.setTableName("ss_user");
-        // 模板目录
-        String templateDirectory = "src/main/resources/template";
-        // 模板名称
-        String templateFile = "model1.ftl";
-        // 模板生成后存放目录
-        String targetPath = "D:/";
-        // 模板生成后新文件名
-        String fileName = "ntest.java";
-        // 创建文件夹
-        File dir = new File(targetPath);
-        if(!dir.exists()) dir.mkdirs();
-        File nFile = new File(targetPath +"/"+ fileName);
-        if (nFile.exists()) {
-            throw new RuntimeException("File \'"+fileName+"\' already exists");
-        }
-        // 生成目标文件
-        Writer writer = null;
-        try {
-            writer = new FileWriter(nFile);
-            Template template = getConfiguration(templateDirectory).getTemplate(templateFile, "UTF-8");
-            template.process(table, writer);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            writer.close();
-        }
-    }
+    private static final Logger log = LoggerFactory.getLogger(FreemarkerUtil.class);
+
+    /**
+     * 参数完善
+     * @param model
+     * @throws Exception
+     */
     public static void paramsProcess(GenerateModel model)  throws Exception {
-        String targetPath = null;
         DBConnector dbConnector = new DBConnector();
         List<Table> tables = DBUtils.getTables(dbConnector, model.getDbName());
+        log.info("获取数据库: {}所有表: {}", model.getDbName(), tables.toString());
+        String target = model.getTargetPath();
+        model.setBasePackagePath(getBasePackagePath(target));
         for(Table table : tables){
             List<TableDetail> colums = DBUtils.getTableDetail(dbConnector, table, model.getDbName());
+            log.info("获取数据库: {}表: {} 所有字段信息: {}", model.getDbName(), table.toString(), colums.toString());
+            table.setTableName(StringUtils.modelNameProcess(table.getTableName()).toString());
             model.setTable(table);
             model.setDetails(colums);
             for(FileType type : FileType.values()){
-                targetPath = model.getPackagePath() + "/" + model.getFileType().getRemarke();
-                model.setPackagePath(targetPath);
                 switch (type) {
-                    case MODEL:
-                        StringBuilder build = StringUtils.modelNameProcess(table.getTableName());
-                        build.append(FileType.MODEL.getSufix());
-                        model.setFileName(build.toString());
+                    case MODEL://ok
+                        model.setTargetPath(target+ FileType.MODEL.getRemarke() + "/");
+                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        model.setFileName(model.getTable().getTableName() + FileType.MODEL.getSufix());
                         model.setTemplateName("model.ftl");
                         generate(model);
+                        log.info("开始生成表:[{}]的 model文件, 参数:{}", table.getTableName(), model.toString());
                         break;
-                    case CLIENT:
+                    case CLIENT://ok
+                        model.setTargetPath(target+ FileType.CLIENT.getRemarke() + "/");
+                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        model.setFileName(model.getTable().getTableName() + FileType.CLIENT.getSufix());
+                        model.setTemplateName("client.ftl");
+                        generate(model);
                         break;
                     case MAPPER:
+                        model.setTargetPath(target+ FileType.MAPPER.getRemarke() + "/");
+                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        model.setFileName(model.getTable().getTableName() + FileType.MAPPER.getSufix());
+                        model.setTemplateName("mapper.ftl");
+                        generate(model);
+                        break;
+                    case XML:
+                        String mainPath = target.substring(0, target.indexOf("java"));
+                        String mapperPath = mainPath + "resources/";
+                        model.setTargetPath(mapperPath+ FileType.XML.getRemarke() + "/");
+//                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        model.setFileName(model.getTable().getTableName() + FileType.XML.getSufix());
+                        model.setTemplateName("XML.ftl");
+                        generate(model);
                         break;
                 }
+                model.setTargetPath(target);
             }
         }
 
     }
+
+    /**
+     * 获取启动类所在的文件夹
+     * @param str
+     * @return
+     */
+    private static String getBasePackagePath(String str){
+        StringBuilder builder = new StringBuilder();
+        String [] dirs = str.split("/");
+        boolean isJavaPackage = Boolean.FALSE;
+        for(String dir: dirs){
+            if(isJavaPackage){
+                builder.append(dir);
+                builder.append(".");
+            }else if(dir.toLowerCase().equals("java")){
+                isJavaPackage = Boolean.TRUE;
+            }else{
+                continue;
+            }
+        }
+        return builder.substring(0, builder.length()-1);
+    }
+    /**
+     * 模板存放路径
+     */
+    private static final String TEMPLATE_DIRECTORY = "src/main/resources/templates";
+
+    /**
+     * 根据模板填充数据,生成文件
+     * @param model
+     * @throws Exception
+     */
     private static void generate(GenerateModel model)  throws Exception {
-        File dir = new File(model.getPackagePath());
+        File dir = new File(model.getTargetPath());
         if(!dir.exists()) dir.mkdirs();
-        String filename = model.getPackagePath() + "/" + model.getFileName();
+        String filename = model.getTargetPath() + "/" + model.getFileName();
         Writer writer = null;
         try{
-//            File file = new File(filename);
-//            if(file.exists()){
-//                System.out.println("[" + filename + "]已存在");
-//            }
             writer = new FileWriter(filename);
-            // 模板目录
-            String templateDirectory = "src/main/resources/templates";
-            Template template = getConfiguration(templateDirectory).getTemplate(model.getTemplateName(), "UTF-8");
+            Template template = getConfiguration(TEMPLATE_DIRECTORY).getTemplate(model.getTemplateName(), "UTF-8");
             template.process(model, writer);
         }catch(Exception ex){
             ex.printStackTrace();
@@ -98,6 +124,11 @@ public class FreemarkerUtil {
         }
     }
 
+    /**
+     * 配置freemarker,加载模板
+     * @param templateDirectory
+     * @return
+     */
     private static Configuration getConfiguration(String templateDirectory) {
 
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_22);

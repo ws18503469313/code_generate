@@ -1,9 +1,13 @@
 package com.generater.core;
 
+/**
+ * 生成的文件类型
+ */
 public enum FileType {
     MODEL("model", 0, ".java"),
-    CLIENT("client", 1, "Client.java"),
-    MAPPER("mapper", 2, "Mapper.java");
+    CLIENT("client", 1, "FeginClient.java"),
+    MAPPER("mapper", 2, "Mapper.java"),
+    XML("xml", 3, "Mapper.xml");
     /**
      * 生成的文件包位置
      */

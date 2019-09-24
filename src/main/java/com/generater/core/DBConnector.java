@@ -15,32 +15,37 @@ public class DBConnector<T>     {
 
 
     private static SessionFactory buildSessionFactory;
-
+    // 1 加载配置文件
     static {
         Configuration configuration = new Configuration().configure("db.xml");
         buildSessionFactory = configuration.buildSessionFactory();
     }
+    // 2.获取SessionFactory对象 相当于获取连接池对象
+    // SessionFactory 是线程安全的
+    // 从工厂中获取一个session对象
+    //openSession 获取的是一个全新的session
     public Session getSession() {
         return buildSessionFactory.openSession();
     }
 
+    /**
+     * 执行sql
+     * @param sql
+     * @param paras sql 中的参数
+     * @param cls   返回的数据类型
+     * @return
+     */
     public  List<T> executeSql(String sql, List<Object> paras, Class cls) {
-        // 1 加载配置文件
-        // 直接调用configure() 系统会默认读取 hibernate.cfg.xml 这个文件
-//        Configuration configuration = new Configuration().configure("db.xml");
-        // 2.获取SessionFactory对象 相当于获取连接池对象
-        // SessionFactory 是线程安全的
-//        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        // 从工厂中获取一个session对象
-        //openSession 获取的是一个全新的session
         Session session = getSession();
         NativeQuery query = session.createNativeQuery(sql);
+        //这里需要注意hibernate的参数下标从 1 开始
         if(paras != null && paras.size() != 0){
             int i = 1;
             for(Object obj : paras){
                 query.setParameter(i++, obj);
             }
         }
+        //解析返回的数据集,转换为传来的class类型
         query.setResultTransformer(new BeanResultTransformer(cls));
         List<T> result =  query.list();
         //5 关闭资源

@@ -8,7 +8,7 @@
     <session-factory >
         <!-- 加载数据库的驱动类 -->
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://123.206.14.25:3306/jshm</property>
+        <property name="hibernate.connection.url">jdbc:mysql://123.206.14.25:3306/</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">Ws123456.</property>
         <!-- hibernate方言(数据库特有的语言) mysql方言 limit-->
@@ -16,7 +16,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- show_sql  format_sql  在控制台打印SQL语句以及格式化打印-->
         <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.format_sql">false</property>
         <!-- hbm2ddl.auto 是否自动生成表结构 -->
         <property name="hibernate.hbm2ddl.auto">update</property>
     </session-factory>

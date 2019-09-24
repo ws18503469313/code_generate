@@ -1,4 +1,7 @@
 package com.generater.model;
+
+import com.generater.utils.StringUtils;
+
 /**
  *	表的详情
  * @author polunzi
@@ -38,7 +41,7 @@ public class Table {
 
 	@Override
 	public String toString() {
-		return "Table{" +
+		return "{" +
 				"tableName='" + tableName + '\'' +
 				", comment='" + comment + '\'' +
 				'}';
