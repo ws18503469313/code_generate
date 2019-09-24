@@ -10,8 +10,12 @@ public class StringUtils {
      * @return
      */
     public static StringBuilder modelNameProcess(String value){
-        String [] seperator = value.toUpperCase().split(BeanResultTransformer.SPLIT);
         StringBuilder builder = new StringBuilder();
+        if(value == null || value == "" ){
+            return builder;
+        }
+
+        String [] seperator = value.toUpperCase().split(BeanResultTransformer.SPLIT);
         for(String str : seperator){
             builder.append(str.charAt(0));
             builder.append(str.substring(1).toLowerCase());
