@@ -1,6 +1,6 @@
 **EXAMPLE**
 
-/**
+    /**
      * 
      * 改项目会自动生成model client mapper, 模板位于resource/templates/文件夹下
      * 需要提供的参数:
@@ -14,6 +14,8 @@
      * @param args
      * @throws Exception
      */
+     
+     
     public static void main(String args[]) throws Exception{
         log.info("程序开始");
         GenerateModel model = new GenerateModel();
