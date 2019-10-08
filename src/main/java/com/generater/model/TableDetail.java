@@ -71,7 +71,7 @@ public class TableDetail  {
             this.colunmType = "Double";
         }
         else this.colunmType = "Object";
-        this.jdbcType = colunmType.substring(0, colunmType.indexOf("("));
+        this.jdbcType = colunmType.substring(0, colunmType.indexOf("(") == -1 ? colunmType.length() -1 : colunmType.indexOf("("));
     }
 
     public String getCloumnName() {

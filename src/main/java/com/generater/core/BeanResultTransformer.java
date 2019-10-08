@@ -91,7 +91,17 @@ public class BeanResultTransformer implements ResultTransformer {
      */
     private  void setValue(Object obj, Object [] values) throws Exception {
         int i = 0;
-        for (Object value : values)
-            this.methods.get(i++).invoke(obj, value);
+        for (Object value : values){
+            try{
+                this.methods.get(i++).invoke(obj, value);
+            }catch(Exception ex){
+                System.out.println(this.methods.get(i).getName());
+                System.out.println(value);
+                System.out.println(obj.toString());
+            }finally{
+
+            }
+        }
+
     }
 }
