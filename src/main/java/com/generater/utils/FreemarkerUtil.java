@@ -43,7 +43,7 @@ public class FreemarkerUtil {
                         model.setTargetPath(target+ FileType.MODEL.getRemarke() + "/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getTableName() + FileType.MODEL.getSufix());
-                        model.setTemplateName("model.ftl");
+                        model.setTemplateName(FileType.MODEL.getRemarke() + ".ftl");
                         generate(model);
                         log.info("开始生成表:[{}]的 model文件, 参数:{}", table.getTableName(), model.toString());
                         break;
@@ -51,14 +51,14 @@ public class FreemarkerUtil {
                         model.setTargetPath(target+ FileType.CLIENT.getRemarke() + "/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getTableName() + FileType.CLIENT.getSufix());
-                        model.setTemplateName("client.ftl");
+                        model.setTemplateName(FileType.CLIENT.getRemarke() + ".ftl");
                         generate(model);
                         break;
                     case MAPPER:
                         model.setTargetPath(target+ FileType.MAPPER.getRemarke() + "/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getTableName() + FileType.MAPPER.getSufix());
-                        model.setTemplateName("mapper.ftl");
+                        model.setTemplateName(FileType.MAPPER.getRemarke() + ".ftl");
                         generate(model);
                         break;
                     case XML:
@@ -67,8 +67,19 @@ public class FreemarkerUtil {
                         model.setTargetPath(mapperPath+ FileType.XML.getRemarke() + "/");
 //                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getTableName() + FileType.XML.getSufix());
-                        model.setTemplateName("XML.ftl");
+                        model.setTemplateName(FileType.XML.getRemarke() + ".ftl");
                         generate(model);
+                        break;
+                    case EXAMPLE:
+                        if(model.getNotCreateExample()){
+                            break;
+                        }
+                        model.setTargetPath(target+ FileType.EXAMPLE.getRemarke() + "/");
+                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        model.setFileName(model.getTable().getTableName() + FileType.EXAMPLE.getSufix());
+                        model.setTemplateName(FileType.EXAMPLE.getRemarke() + ".ftl");
+                        generate(model);
+                        log.info("开始生成表:[{}]的 example 文件, 参数:{}", table.getTableName(), model.toString());
                         break;
                 }
                 model.setTargetPath(target);

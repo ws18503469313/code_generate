@@ -7,7 +7,8 @@ public enum FileType {
     MODEL("model", 0, ".java"),
     CLIENT("client", 1, "FeginClient.java"),
     MAPPER("mapper", 2, "Mapper.java"),
-    XML("xml", 3, "Mapper.xml");
+    XML("xml", 3, "Mapper.xml"),
+    EXAMPLE("example", 4, "Example.java");
     /**
      * 生成的文件包位置
      */

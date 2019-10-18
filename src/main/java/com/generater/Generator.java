@@ -30,6 +30,7 @@ public class Generator {
     public static void main(String args[]) throws Exception {
         log.info("程序开始");
         GenerateModel model = new GenerateModel();
+        model.setNotCreateExample(Boolean.TRUE);//配置生成example文件
         model.setDbName("dm_user");
         model.setTargetPath("D:/project/damiwang/user-provide/src/main/java/com/cloud/provide/");
         FreemarkerUtil.paramsProcess(model);

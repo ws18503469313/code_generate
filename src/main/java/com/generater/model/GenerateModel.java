@@ -42,6 +42,10 @@ public class GenerateModel {
      * 生成的文件类型
      */
     private FileType fileType;
+    /**
+     * 默认不生成example文件
+     */
+    private Boolean notCreateExample = Boolean.FALSE;
 
     public String getDbName() {
         return dbName;
@@ -109,6 +113,14 @@ public class GenerateModel {
 
     public void setBasePackagePath(String basePackagePath) {
         this.basePackagePath = basePackagePath;
+    }
+
+    public Boolean getNotCreateExample() {
+        return notCreateExample;
+    }
+
+    public void setNotCreateExample(Boolean notCreateExample) {
+        this.notCreateExample = notCreateExample;
     }
 
     @Override
