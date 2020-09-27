@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+* ${table.comments?if_exists}
 *  auto genetated
-* @author polunzi
 * @Date: ${.now?string["yyyy-MM-dd"]}
 */
-public class ${table.tableName}Example {
+public class ${table.voName}Example {
 
     protected String orderByClause;
 
@@ -16,7 +16,7 @@ public class ${table.tableName}Example {
 
     protected List<Criteria> oredCriteria;
 
-    public ${table.tableName}Example() {
+    public ${table.voName}Example() {
         oredCriteria = new ArrayList<Criteria>();
     }
     public void setOrderByClause(String orderByClause) {

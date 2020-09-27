@@ -32,7 +32,7 @@ public class Generator {
         GenerateModel model = new GenerateModel();
         model.setNotCreateExample(Boolean.TRUE);//配置生成example文件
         model.setDbName("dm_user");
-        model.setTargetPath("D:/project/damiwang/user-provide/src/main/java/com/cloud/provide/");
+        model.setTargetPath("F:/space/MDAP/medex_mdap_mcpc/src/main/java/com/medex/mdap/mnsc/");
         FreemarkerUtil.paramsProcess(model);
         log.info("程序结束");
     }

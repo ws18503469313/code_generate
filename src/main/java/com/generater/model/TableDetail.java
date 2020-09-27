@@ -2,11 +2,6 @@ package com.generater.model;
 
 import com.generater.utils.StringUtils;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
-
 /**
  *	一张表的字段详情
  * @author polunzi
@@ -40,7 +35,7 @@ public class TableDetail  {
 	/**
 	 * 备注
 	 */
-	private String comment;
+	private String comments;
 
     /**
      * 根据数据库类型获得java类型名称
@@ -69,6 +64,10 @@ public class TableDetail  {
             this.colunmType = "Boolean";
         else if(colunmType.toLowerCase().contains("double")){
             this.colunmType = "Double";
+        }else if(colunmType.toLowerCase().contains("varchar2")){
+            this.colunmType = "String";
+        }else if(colunmType.toLowerCase().contains("char")){
+            this.colunmType = "Integer";
         }
         else this.colunmType = "Object";
         this.jdbcType = colunmType.substring(0, colunmType.indexOf("(") == -1 ? colunmType.length() -1 : colunmType.indexOf("("));
@@ -103,12 +102,12 @@ public class TableDetail  {
         this.nullAble = nullAble;
     }
 
-    public String getComment() {
-        return comment;
+    public String getComments() {
+        return comments;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public String getJdbcType() {
@@ -126,7 +125,7 @@ public class TableDetail  {
                 ", colunmType='" + colunmType + '\'' +
                 ", pri='" + pri + '\'' +
                 ", nullAble='" + nullAble + '\'' +
-                ", comment='" + comment + '\'' +
+                ", comment='" + comments + '\'' +
                 '}';
     }
 }

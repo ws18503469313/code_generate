@@ -9,6 +9,7 @@ public class GenerateModel {
      * 数据库名
      */
     private String dbName;
+
     /**
      * 文件包的基本路径
      */
@@ -54,6 +55,8 @@ public class GenerateModel {
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
+
+
 
     public String getPackagePath() {
         return packagePath;

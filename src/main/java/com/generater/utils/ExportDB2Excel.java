@@ -73,8 +73,8 @@ public class ExportDB2Excel {
 
 
             cell = detailRow.createCell(1);
-            if(table.getComment() != null) {
-                cell.setCellValue(table.getComment());
+            if(table.getComments() != null) {
+                cell.setCellValue(table.getComments());
             }else {
                 cell.setCellValue("");
             }
@@ -144,8 +144,8 @@ public class ExportDB2Excel {
             }
 
             cell = detailRow.createCell(column++);
-            if(detail.getComment() != null) {
-                cell.setCellValue(detail.getComment());
+            if(detail.getComments() != null) {
+                cell.setCellValue(detail.getComments());
             }else {
                 cell.setCellValue("");
             }

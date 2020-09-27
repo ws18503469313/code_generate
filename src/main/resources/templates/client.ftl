@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
 *  auto genetated
-* @author polunzi
 * @Date: ${.now?string["yyyy-MM-dd"]}
 */
 @FeignClient(name = "",  fallbackFactory = ${table.tableName}FactoryFallBack.class)

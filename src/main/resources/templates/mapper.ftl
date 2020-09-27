@@ -1,10 +1,10 @@
 package ${packagePath};
 
-import ${basePackagePath}.model.${table.tableName};
-import com.cloud.util.MyMapper;
+import ${basePackagePath}.${table.moduleName}.pojo.${table.voName};
+import tk.mybatis.mapper.common.Mapper;
 
 
-public interface ${table.tableName}Mapper extends MyMapper<${table.tableName}> {
+public interface ${table.voName}Mapper extends Mapper<${table.voName}> {
 
 
 }
