@@ -24,13 +24,8 @@ public class ${table.voName} implements Serializable{
         @Id
         </#if>
         @Column(name = "${cloum.cloumnName}")
-        private ${cloum.colunmType} ${ cloum.property ?uncap_first};
-        public void set${cloum.property}(${cloum.colunmType} ${cloum.property ?uncap_first} ){
-            this.${cloum.property ?uncap_first} = ${cloum.property ?uncap_first};
-        }
-        public ${cloum.colunmType} get${cloum.property}(){
-            return this.${cloum.property ?uncap_first};
-        }
+        private ${cloum.colunmType} ${ cloum.property?uncap_first};
+
     </#list>
 
 }

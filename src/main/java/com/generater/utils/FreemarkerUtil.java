@@ -74,7 +74,7 @@ public class FreemarkerUtil {
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.MAPPER.getSufix());
                         model.setTemplateName(FileType.MAPPER.getRemarke() + ".ftl");
-                        generate(model);
+//                        generate(model);
                         break;
                     case XML:
                         String mainPath = target.substring(0, target.indexOf("java"));
@@ -83,7 +83,7 @@ public class FreemarkerUtil {
 //                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.XML.getSufix());
                         model.setTemplateName(FileType.XML.getRemarke() + ".ftl");
-                        generate(model);
+//                        generate(model);
                         break;
                     case EXAMPLE:
                         if(model.getNotCreateExample()){
