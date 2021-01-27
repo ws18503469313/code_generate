@@ -1,10 +1,23 @@
 package com.generater.model;
 
+import com.generater.core.DbType;
 import com.generater.core.FileType;
 
 import java.util.List;
 
 public class GenerateModel {
+
+    /**
+     * @date: 2021/1/27
+     * @desc: 数据库类型
+     */
+    private DbType dbType;
+
+    /**
+     * 生成的文件类型
+     */
+    private List<FileType> genFileType;
+
     /**
      * 数据库名
      */
@@ -107,7 +120,11 @@ public class GenerateModel {
     }
 
     public void setTargetPath(String targetPath) {
-        this.targetPath = targetPath;
+        if(!targetPath.endsWith("/")){
+            this.targetPath = targetPath + "/";
+        }else{
+            this.targetPath = targetPath;
+        }
     }
 
     public String getBasePackagePath() {
@@ -124,6 +141,22 @@ public class GenerateModel {
 
     public void setNotCreateExample(Boolean notCreateExample) {
         this.notCreateExample = notCreateExample;
+    }
+
+    public DbType getDbType() {
+        return dbType;
+    }
+
+    public void setDbType(DbType dbType) {
+        this.dbType = dbType;
+    }
+
+    public List<FileType> getGenFileType() {
+        return genFileType;
+    }
+
+    public void setGenFileType(List<FileType> genFileType) {
+        this.genFileType = genFileType;
     }
 
     @Override

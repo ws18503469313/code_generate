@@ -1,8 +1,10 @@
 package com.generater;
 
+import com.generater.core.DbType;
 import com.generater.core.FileType;
 import com.generater.model.GenerateModel;
 import com.generater.utils.FreemarkerUtil;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +32,12 @@ public class Generator {
     public static void main(String args[]) throws Exception {
         log.info("程序开始");
         GenerateModel model = new GenerateModel();
-        model.setNotCreateExample(Boolean.TRUE);//配置生成example文件
-        model.setDbName("dm_user");
-        model.setTargetPath("F:/space/MDAP/medex_mdap_mcpc/src/main/java/com/medex/mdap/mnsc/");
-        FreemarkerUtil.paramsProcess(model);
+        model.setNotCreateExample(Boolean.FALSE);//配置生成example文件
+        model.setDbName("qyy");
+        model.setGenFileType(Lists.newArrayList(FileType.MODEL, FileType.XML, FileType.MAPPER, FileType.EXAMPLE));
+        model.setTargetPath("/Users/polunzi/space/market-manager/src/main/java/com/qyy/market");
+        model.setDbType(DbType.MYSQL);
+        FreemarkerUtil.gen(model);
         log.info("程序结束");
     }
 

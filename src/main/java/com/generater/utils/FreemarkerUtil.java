@@ -1,6 +1,8 @@
 package com.generater.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.generater.core.DBConnector;
+import com.generater.core.DbType;
 import com.generater.core.FileType;
 import com.generater.model.GenerateModel;
 import com.generater.model.Table;
@@ -8,6 +10,7 @@ import com.generater.model.TableDetail;
 import com.google.common.collect.Lists;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.utility.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,32 +18,47 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class FreemarkerUtil {
 
     private static final Logger log = LoggerFactory.getLogger(FreemarkerUtil.class);
 
+
+    private static DBUtils getDBUtil(DbType dbType){
+        switch (dbType){
+            case MYSQL:
+                return new MysqlDBUtils();
+            case ORACLE:
+                return new OracleDBUtils();
+            default:
+                return null;
+        }
+    }
+
     /**
      * 参数完善
-     * @param model
+     * @param params
      * @throws Exception
      */
-    public static void paramsProcess(GenerateModel model)  throws Exception {
-        DBConnector dbConnector = new DBConnector();
-        List<Table> tables = DBUtils.getTables(dbConnector, model.getDbName());
-//        log.info("获取数据库: {}所有表: {}", model.getDbName(), tables.toString());
-        String target = model.getTargetPath();
-        model.setBasePackagePath(getBasePackagePath(target));
-        List<String> needGen = Lists.newArrayList("RE_EMGENCY", "RE_LIFE_SIGN", "CPC_PAT_ECG", "RE_HISTORY",
-                "RE_IMAGE_CHECK", "RE_LAB_CHECK", "RE_LAB_CTNI", "NSC_BI", "NSC_ICH", "NSC_SAH", "NSC_SAH_IMAGE",
-                "NSC_AVM", "NSC_MOYA", "RE_OUTCOME", "CPC_OUTDRUGDETAILS", "CPC_TASK");
+    public static void gen(GenerateModel params)  throws Exception {
+        DBConnector dbConnector = new DBConnector(params.getDbType());
+        DBUtils dbUtils = getDBUtil(params.getDbType());
+        List<Table> tables = dbUtils.getTables(dbConnector, params.getDbName());
+        log.info("获取数据库: {}所有表: {}", params.getDbName(), tables.toString());
+        String target = params.getTargetPath();
+        //生成位置适配
+        if(!target.endsWith("/")){
+            target += "/";
+        }
+        params.setBasePackagePath(getBasePackagePath(target));
         for(Table table : tables){
-            if(!needGen.contains(table.getTableName())){
-                continue;
-            }
-            List<TableDetail> colums = DBUtils.getTableDetail(dbConnector, table, model.getDbName());
-//            log.info("获取数据库: {}表: {} 所有字段信息: {}", model.getDbName(), table.toString(), colums.toString());
+            GenerateModel model = JSON.parseObject(JSON.toJSONString(params), GenerateModel.class);
+            List<TableDetail> colums = dbUtils.getTableDetail(dbConnector, table, model.getDbName());
+            log.info("获取数据库: {}表: {} 所有字段信息: {}", model.getDbName(), table.toString(), colums.toString());
             int idx = table.getTableName().indexOf("_");
             if(idx != -1){
                 table.setVoName(StringUtils.modelNameProcess(table.getTableName().substring(idx + 1)).toString());
@@ -50,59 +68,63 @@ public class FreemarkerUtil {
             table.setTableName(StringUtils.modelNameProcess(table.getTableName()).toString());
             model.setTable(table);
             model.setDetails(colums);
-//            System.out.println(model.toString());
-            for(FileType type : FileType.values()){
+            Collection<FileType> types = model.getGenFileType();
+            if(types == null){
+                types = Arrays.asList(FileType.values());
+            }
+            for(FileType type : types){
                 switch (type) {
-                    case MODEL://ok
-//                        model.setTargetPath(target+ FileType.MODEL.getRemarke() + "/");
+                    case MODEL:
                         model.setTargetPath(target+ table.getModuleName() + "/" + FileType.MODEL.getRemarke() +"/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.MODEL.getSufix());
                         model.setTemplateName(FileType.MODEL.getRemarke() + ".ftl");
                          generate(model);
-//                        log.info("开始生成表:[{}]的 model文件, 参数:{}", table.getTableName(), model.toString());
+                        log.info("开始生成表:[{}]的 model文件, 参数:{}", table.getTableName(), model.toString());
                         break;
-                    case CLIENT://ok
-                        model.setTargetPath(target+ FileType.CLIENT.getRemarke() + "/");
+                    case CLIENT:
+                        model.setTargetPath(target+ table.getModuleName() + "/" + FileType.CLIENT.getRemarke() +"/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.CLIENT.getSufix());
                         model.setTemplateName(FileType.CLIENT.getRemarke() + ".ftl");
-//                        generate(model);
+                        generate(model);
                         break;
                     case MAPPER:
                         model.setTargetPath(target + table.getModuleName() + "/" +  FileType.MAPPER.getRemarke() + "/");
                         model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.MAPPER.getSufix());
                         model.setTemplateName(FileType.MAPPER.getRemarke() + ".ftl");
-//                        generate(model);
+                        generate(model);
+                        log.info("开始生成表:[{}]的 mapper.java 文件, 参数:{}", table.getTableName(), model.toString());
                         break;
                     case XML:
                         String mainPath = target.substring(0, target.indexOf("java"));
-                        String mapperPath = mainPath + "resources/" + "com/medex/mdap/mnsc/dao/";
-                        model.setTargetPath(mapperPath + table.getModuleName() + "/" + FileType.XML.getRemarke() + "/");
-//                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
+                        String mapperPath = mainPath + "resources/" + "mapper/";
+                        model.setTargetPath(mapperPath + table.getModuleName()+"/");
                         model.setFileName(model.getTable().getVoName() + FileType.XML.getSufix());
                         model.setTemplateName(FileType.XML.getRemarke() + ".ftl");
-//                        generate(model);
+                        generate(model);
+                        log.info("开始生成表:[{}]的 mapper.xml 文件, 参数:{}", table.getTableName(), model.toString());
                         break;
                     case EXAMPLE:
                         if(model.getNotCreateExample()){
                             break;
                         }
-//                        model.setTargetPath(target+ FileType.EXAMPLE.getRemarke() + "/");
-                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
-//                        model.setFileName(model.getTable().getTableName() + FileType.EXAMPLE.getSufix());
-                        model.setFileName(model.getTable().getTableName() + FileType.EXAMPLE.getSufix());
+                        model.setTargetPath(target + table.getModuleName() + "/" + FileType.EXAMPLE.getRemarke() + "/");
+                        model.setFileName(model.getTable().getVoName() + FileType.EXAMPLE.getSufix());
                         model.setTemplateName(FileType.EXAMPLE.getRemarke() + ".ftl");
-//                        generate(model);
+                        generate(model);
                         log.info("开始生成表:[{}]的 example 文件, 参数:{}", table.getTableName(), model.toString());
                         break;
+                    default:
+                        return;
                 }
                 model.setTargetPath(target);
             }
         }
 
     }
+
 
     /**
      * 获取启动类所在的文件夹
@@ -117,7 +139,7 @@ public class FreemarkerUtil {
             if(isJavaPackage){
                 builder.append(dir);
                 builder.append(".");
-            }else if(dir.toLowerCase().equals("java")){
+            }else if(dir.equalsIgnoreCase("java")){
                 isJavaPackage = Boolean.TRUE;
             }else{
                 continue;
@@ -161,7 +183,6 @@ public class FreemarkerUtil {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_22);
         try {
             configuration.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
-//            configuration.setClassicCompatible(true);
             configuration.setDirectoryForTemplateLoading(new File(templateDirectory));
         } catch (IOException e) {
             throw new RuntimeException(e);

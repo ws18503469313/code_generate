@@ -1,27 +1,36 @@
 package com.generater.core;
 
-import com.generater.model.Table;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.ResultTransformer;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DBConnector<T>     {
 
 
     private static SessionFactory buildSessionFactory;
-    // 1 加载配置文件
-    static {
-        Configuration configuration = new Configuration().configure("db.xml");
+    /**
+     * 数据库类型
+     * 支持 mysql, oracle
+     */
+    private DbType dbType;
+
+    public DbType getDbType() {
+        return dbType;
+    }
+
+    private static Configuration configuration;
+
+    public DBConnector(DbType dbType) {
+        this.dbType = dbType;
+        // 1 加载配置文件
+        configuration = new Configuration().configure(dbType.getConfigName());
+        // 2.获取SessionFactory对象 相当于获取连接池对象
+        // SessionFactory 是线程安全的
         buildSessionFactory = configuration.buildSessionFactory();
     }
-    // 2.获取SessionFactory对象 相当于获取连接池对象
-    // SessionFactory 是线程安全的
     // 从工厂中获取一个session对象
     //openSession 获取的是一个全新的session
     public Session getSession() {

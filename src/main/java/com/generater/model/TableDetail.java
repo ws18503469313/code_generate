@@ -7,7 +7,7 @@ import com.generater.utils.StringUtils;
  * @author polunzi
  *
  */
-public class TableDetail  {
+public class TableDetail implements DbInfo {
 	/**
 	 * 字段名
 	 */
@@ -46,7 +46,7 @@ public class TableDetail  {
                 || colunmType.toLowerCase().contains("blob")
                 || colunmType.toLowerCase().contains("text"))
             this.colunmType = "String";
-        else if(colunmType.toLowerCase().contains("biginteger") )
+        else if(colunmType.toLowerCase().contains("bigint") )
             this.colunmType = "Long";
         else if(colunmType.toLowerCase().contains("int")
                 || colunmType.toLowerCase().contains("smallint")

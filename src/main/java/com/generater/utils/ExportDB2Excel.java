@@ -1,6 +1,7 @@
 package com.generater.utils;
 
 import com.generater.core.DBConnector;
+import com.generater.core.DbType;
 import com.generater.model.Table;
 import com.generater.model.TableDetail;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,12 +28,13 @@ public class ExportDB2Excel {
      */
     public static void main(String args[]) throws Exception{
 
-        DBConnector connector = new DBConnector();
-        List<Table> tables = DBUtils.getTables(connector, dbName);
+        DBConnector connector = new DBConnector(DbType.MYSQL);
+        DBUtils utils = new MysqlDBUtils();
+        List<Table> tables = utils.getTables(connector, dbName);
         Workbook workbook = new HSSFWorkbook();
         createSimpleGuide(workbook, tables);
         for(Table table : tables){
-            List<TableDetail> details = DBUtils.getTableDetail(connector, table, dbName);
+            List<TableDetail> details = utils.getTableDetail(connector, table, dbName);
             creaSheet(workbook, table.getTableName(), details);
         }
         //将文件导出到本地

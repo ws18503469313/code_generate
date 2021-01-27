@@ -5,7 +5,7 @@ package com.generater.model;
  * @author polunzi
  *
  */
-public class Table {
+public class Table implements DbInfo{
 
 
 	/**
@@ -45,7 +45,7 @@ public class Table {
 
 	public void setVoName(String voName) {
 		this.moduleName = voName.toLowerCase();
-		this.voName = voName + "VO";
+		this.voName = voName;
 	}
 
 	public String getModuleName() {

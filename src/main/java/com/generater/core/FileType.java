@@ -2,12 +2,13 @@ package com.generater.core;
 
 /**
  * 生成的文件类型
+ * @author polunzi
  */
 public enum FileType {
-    MODEL("pojo", 0, ".java"),
+    MODEL("model", 0, ".java"),
     CLIENT("client", 1, "FeginClient.java"),
     MAPPER("mapper", 2, "Mapper.java"),
-    XML("xml", 3, "Mapper.xml"),
+    XML("XML", 3, "Mapper.xml"),
     EXAMPLE("example", 4, "Example.java");
     /**
      * 生成的文件包位置
@@ -26,29 +27,14 @@ public enum FileType {
         this.value = value;
         this.sufix = sufix;
     }
-
     public String getRemarke() {
         return remarke;
     }
-
-    public void setRemarke(String remarke) {
-        this.remarke = remarke;
-    }
-
     public Integer getValue() {
         return value;
     }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
     public String getSufix() {
         return sufix;
-    }
-
-    public void setSufix(String sufix) {
-        this.sufix = sufix;
     }
 
     FileType getByValue(int value){

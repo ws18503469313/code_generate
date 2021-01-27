@@ -9,17 +9,18 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 /**
-*  auto genetated
-* @Date: ${.now?string["yyyy-MM-dd"]}
-*/
+ *  auto genetated
+ *  @desc ${table.comments}
+ *  @Date ${.now?string["yyyy-MM-dd"]}
+ */
 @Table(name = "${table.tableName}")
 public class ${table.voName} implements Serializable{
 
     <#list details as cloum>
         /**
-        *${cloum.comments?if_exists}
-        *
-        **/
+         * ${cloum.comments?if_exists}
+         *
+         */
         <#if cloum.pri == "TRUE">
         @Id
         </#if>
