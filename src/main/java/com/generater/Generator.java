@@ -33,9 +33,9 @@ public class Generator {
         log.info("程序开始");
         GenerateModel model = new GenerateModel();
         model.setNotCreateExample(Boolean.FALSE);//配置生成example文件
-        model.setDbName("qyy");
+        model.setDbName("market");
         model.setGenFileType(Lists.newArrayList(FileType.MODEL, FileType.XML, FileType.MAPPER, FileType.EXAMPLE));
-        model.setTargetPath("/Users/polunzi/space/market-manager/src/main/java/com/qyy/market");
+        model.setTargetPath("/Users/polunzi/space/market-manage/src/main/java/com/qyy/market");
         model.setDbType(DbType.MYSQL);
         FreemarkerUtil.gen(model);
         log.info("程序结束");

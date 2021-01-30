@@ -2,6 +2,9 @@ package com.generater.model;
 
 import com.generater.utils.StringUtils;
 
+import java.sql.JDBCType;
+import java.util.Locale;
+
 /**
  *	一张表的字段详情
  * @author polunzi
@@ -44,33 +47,48 @@ public class TableDetail implements DbInfo {
 	public void setColunmType(String colunmType) {
         if(colunmType.toLowerCase().contains("char") || colunmType.toLowerCase().contains("char")
                 || colunmType.toLowerCase().contains("blob")
-                || colunmType.toLowerCase().contains("text"))
+                || colunmType.toLowerCase().contains("text")) {
             this.colunmType = "String";
-        else if(colunmType.toLowerCase().contains("bigint") )
+            this.jdbcType = JDBCType.VARCHAR.getName();
+        }else if(colunmType.toLowerCase().contains("bigint") ) {
             this.colunmType = "Long";
+            this.jdbcType = JDBCType.BIGINT.getName();
+        }
         else if(colunmType.toLowerCase().contains("int")
                 || colunmType.toLowerCase().contains("smallint")
-                || colunmType.toLowerCase().contains("mediumint"))
+                || colunmType.toLowerCase().contains("mediumint")) {
             this.colunmType = "Integer";
-        else if(colunmType.toLowerCase().contains("float") )
+            this.jdbcType = JDBCType.INTEGER.getName();
+        }else if(colunmType.toLowerCase().contains("float") ) {
             this.colunmType = "Float";
-        else if(colunmType.toLowerCase().contains("biginteger") || colunmType.toLowerCase().contains("integer") )
+            this.jdbcType = JDBCType.FLOAT.getName();
+        }
+        else if(colunmType.toLowerCase().contains("biginteger") || colunmType.toLowerCase().contains("integer") ) {
             this.colunmType = "Long";
-        else if(colunmType.toLowerCase().contains("decimal") )
+            this.jdbcType = JDBCType.BIGINT.getName();
+        }else if(colunmType.toLowerCase().contains("decimal") ) {
             this.colunmType = "BigDecimal";
-        else if(colunmType.toLowerCase().contains("timestamp")|| colunmType.toLowerCase().contains("datetime") )
+            this.jdbcType = JDBCType.DECIMAL.getName();
+        }else if(colunmType.toLowerCase().contains("timestamp")|| colunmType.toLowerCase().contains("datetime") ) {
             this.colunmType = "Date";
-        else if(colunmType.toLowerCase().contains("bit") )
+            this.jdbcType = JDBCType.TIMESTAMP.getName();
+        }else if(colunmType.toLowerCase().contains("bit") ) {
             this.colunmType = "Boolean";
-        else if(colunmType.toLowerCase().contains("double")){
+            this.jdbcType = JDBCType.TINYINT.getName();
+        }else if(colunmType.toLowerCase().contains("double")){
             this.colunmType = "Double";
+            this.jdbcType = JDBCType.DOUBLE.getName();
         }else if(colunmType.toLowerCase().contains("varchar2")){
             this.colunmType = "String";
+            this.jdbcType = JDBCType.VARCHAR.getName();
         }else if(colunmType.toLowerCase().contains("char")){
-            this.colunmType = "Integer";
+            this.colunmType = "String";
+            this.jdbcType = JDBCType.CHAR.getName();
         }
-        else this.colunmType = "Object";
-        this.jdbcType = colunmType.substring(0, colunmType.indexOf("(") == -1 ? colunmType.length() -1 : colunmType.indexOf("("));
+        else{
+            this.colunmType = "Object";
+            this.jdbcType = JDBCType.VARCHAR.getName();
+        }
     }
 
     public String getCloumnName() {

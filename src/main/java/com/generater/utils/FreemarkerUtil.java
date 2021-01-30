@@ -65,7 +65,7 @@ public class FreemarkerUtil {
             }else{
                 table.setVoName(table.getTableName());
             }
-            table.setTableName(StringUtils.modelNameProcess(table.getTableName()).toString());
+//            table.setTableName(StringUtils.modelNameProcess(table.getTableName()).toString());
             model.setTable(table);
             model.setDetails(colums);
             Collection<FileType> types = model.getGenFileType();
