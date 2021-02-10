@@ -52,7 +52,6 @@ public class OracleDBUtils implements DBUtils{
                 "inner join user_tab_comments f on t.table_name = f.table_name";
         List<Object> paras = new ArrayList<>();
         return dbConnector.executeSql(sql, paras,  Table.class);
-
     }
 
 }

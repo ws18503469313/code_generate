@@ -2,9 +2,9 @@ package com.generater.model;
 
 import com.generater.utils.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.JDBCType;
 import java.util.Locale;
-
 /**
  *	一张表的字段详情
  * @author polunzi

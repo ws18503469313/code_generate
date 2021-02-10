@@ -2,6 +2,9 @@ package ${packagePath};
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.math.BigDecimal;
+
 
 /**
 * ${table.comments?if_exists}
@@ -120,62 +123,62 @@ public class ${table.voName}Example {
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}EqualTo(String value) {
+        public Criteria and${cloum.property}EqualTo(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} =", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}NotEqualTo(String value) {
+        public Criteria and${cloum.property}NotEqualTo(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} <>", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}GreaterThan(String value) {
+        public Criteria and${cloum.property}GreaterThan(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} >", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}GreaterThanOrEqualTo(String value) {
+        public Criteria and${cloum.property}GreaterThanOrEqualTo(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} >=", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}LessThan(String value) {
+        public Criteria and${cloum.property}LessThan(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} <", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}LessThanOrEqualTo(String value) {
+        public Criteria and${cloum.property}LessThanOrEqualTo(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} <=", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}Like(String value) {
+        public Criteria and${cloum.property}Like(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} like", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}NotLike(String value) {
+        public Criteria and${cloum.property}NotLike(${cloum.colunmType} value) {
             addCriterion("${cloum.cloumnName} not like", value, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}In(List<String> values) {
+        public Criteria and${cloum.property}In(List<${cloum.colunmType}> values) {
             addCriterion("${cloum.cloumnName} in", values, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}NotIn(List<String> values) {
+        public Criteria and${cloum.property}NotIn(List<${cloum.colunmType}> values) {
             addCriterion("${cloum.cloumnName} not in", values, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}Between(String value1, String value2) {
+        public Criteria and${cloum.property}Between(${cloum.colunmType} value1, ${cloum.colunmType} value2) {
             addCriterion("${cloum.cloumnName} between", value1, value2, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }
 
-        public Criteria and${cloum.property}NotBetween(String value1, String value2) {
+        public Criteria and${cloum.property}NotBetween(${cloum.colunmType} value1, ${cloum.colunmType} value2) {
             addCriterion("${cloum.cloumnName} not between", value1, value2, "${cloum.property ?uncap_first}");
             return (Criteria) this;
         }

@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+
+import com.qyy.market.ddd.AbstractEntity;
+
 /**
  *  auto genetated
  *  @desc ${table.comments}
@@ -18,18 +21,18 @@ import java.util.Date;
 @Table(name = "${table.tableName}")
 @Getter
 @Setter
-public class ${table.voName} implements Serializable{
+public class ${table.voName} extends AbstractEntity {
 
     <#list details as cloum>
+
+        <#if !cloum.cloumnName?contains("last") && !cloum.cloumnName?contains("create") && cloum.pri != "TRUE">
         /**
          * ${cloum.comments?if_exists}
          *
          */
-        <#if cloum.pri == "TRUE">
-        @Id
-        </#if>
         @Column(name = "${cloum.cloumnName}")
         private ${cloum.colunmType} ${ cloum.property?uncap_first};
+        </#if>
     </#list>
 
 }

@@ -111,6 +111,7 @@ public class FreemarkerUtil {
                             break;
                         }
                         model.setTargetPath(target + table.getModuleName() + "/" + FileType.EXAMPLE.getRemarke() + "/");
+                        model.setPackagePath(getBasePackagePath(model.getTargetPath()));
                         model.setFileName(model.getTable().getVoName() + FileType.EXAMPLE.getSufix());
                         model.setTemplateName(FileType.EXAMPLE.getRemarke() + ".ftl");
                         generate(model);
