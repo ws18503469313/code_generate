@@ -41,6 +41,10 @@ public class TableDetail implements DbInfo {
 	private String comments;
 
     /**
+     * 长度
+     */
+	private String size = "";
+    /**
      * 根据数据库类型获得java类型名称
      * @param colunmType
      */
@@ -89,6 +93,10 @@ public class TableDetail implements DbInfo {
             this.colunmType = "Object";
             this.jdbcType = JDBCType.VARCHAR.getName();
         }
+
+        int openIdx = colunmType.indexOf("(") + 1;
+        int closeIdx = colunmType.indexOf(")");
+        this.size = colunmType.substring(openIdx, closeIdx);
     }
 
     public String getCloumnName() {
@@ -134,6 +142,14 @@ public class TableDetail implements DbInfo {
 
     public String getProperty() {
         return property;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     @Override

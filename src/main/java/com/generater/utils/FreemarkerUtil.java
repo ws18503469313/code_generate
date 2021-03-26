@@ -28,7 +28,7 @@ public class FreemarkerUtil {
     private static final Logger log = LoggerFactory.getLogger(FreemarkerUtil.class);
 
 
-    private static DBUtils getDBUtil(DbType dbType){
+    public static DBUtils getDBUtil(DbType dbType){
         switch (dbType){
             case MYSQL:
                 return new MysqlDBUtils();

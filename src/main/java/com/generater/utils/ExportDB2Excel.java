@@ -21,7 +21,7 @@ import java.util.List;
 public class ExportDB2Excel {
 
 
-    private static String dbName = "dm_order";
+    private static String dbName = "mkt";
     /**
      * @param args
      * @throws Exception
@@ -38,7 +38,7 @@ public class ExportDB2Excel {
             creaSheet(workbook, table.getTableName(), details);
         }
         //将文件导出到本地
-        File file = new File("D:/dbtabels_" + dbName + ".xls");
+        File file = new File("/Users/polunzi/temp/dbtabels_" + dbName + ".xls");
         OutputStream outputStream = new FileOutputStream(file);
         workbook.write(outputStream);
         outputStream.close();
@@ -85,7 +85,8 @@ public class ExportDB2Excel {
     /**
      * 	详情sheet表头
      */
-    private static final String[] heads = new String [] {"代码", "名称", "数据类型", "主要的", "强制", "注释"};
+//    private static final String[] heads = new String [] {"代码", "名称", "数据类型", "主要的", "强制", "注释"};
+    private static final String[] headers = new String [] {"列名", "列标识符", "数据类型", "宽度", "主/外键", "字段约束值"};
     /**
      * 	将数据表的详情填充到sheet
      * @param workbook
@@ -98,18 +99,24 @@ public class ExportDB2Excel {
 
         Row headRow = sheet.createRow(0);
         Cell cell = null;
-        for (int i = 0; i < heads.length; i++) {
+        for (int i = 0; i < headers.length; i++) {
             cell = headRow.createCell(i);
-            cell.setCellValue(heads[i]);
+            cell.setCellValue(headers[i]);
             sheet.setColumnWidth(i, 4000);
         }
-
         int rowNum = 1;
         Row detailRow = null;
         for (TableDetail detail : details) {
             detailRow = sheet.createRow(rowNum++);
             int column = 0;
-
+            // 列名
+            cell = detailRow.createCell(column++);
+            if(detail.getComments() != null) {
+                cell.setCellValue(detail.getComments());
+            }else {
+                cell.setCellValue(detail.getCloumnName());
+            }
+            //列标识符
             cell = detailRow.createCell(column++);
             if(detail.getCloumnName() != null) {
                 cell.setCellValue(detail.getCloumnName());
@@ -117,27 +124,28 @@ public class ExportDB2Excel {
                 cell.setCellValue("");
             }
 
-            cell = detailRow.createCell(column++);
-            if(detail.getCloumnName() != null) {
-                cell.setCellValue(detail.getCloumnName());
-            }else {
-                cell.setCellValue("");
-            }
-
+            //数据类型
             cell = detailRow.createCell(column++);
             if(detail.getColunmType() != null) {
                 cell.setCellValue(detail.getColunmType());
             }else {
                 cell.setCellValue("");
             }
-
+            //数据类型
+            cell = detailRow.createCell(column++);
+            if(detail.getSize() != null) {
+                cell.setCellValue(detail.getSize());
+            }else {
+                cell.setCellValue("");
+            }
+            //主键
             cell = detailRow.createCell(column++);
             if(detail.getPri() != null) {
                 cell.setCellValue(detail.getPri());
             }else {
                 cell.setCellValue("");
             }
-
+            //是否可为空
             cell = detailRow.createCell(column++);
             if(detail.getNullAble() != null) {
                 cell.setCellValue(detail.getNullAble());
@@ -145,12 +153,6 @@ public class ExportDB2Excel {
                 cell.setCellValue("");
             }
 
-            cell = detailRow.createCell(column++);
-            if(detail.getComments() != null) {
-                cell.setCellValue(detail.getComments());
-            }else {
-                cell.setCellValue("");
-            }
 
         }
     }
